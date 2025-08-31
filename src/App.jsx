@@ -4,13 +4,12 @@ import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Nav from "./components/Nav";
 import Testimonials from "./components/Testimonials";
+import Specials from "./components/Specials";
 
 function App() {
   return (
     <>
-      <header>
-        <Nav />
-      </header>
+      <Nav />
 
       <main>
         <Hero />
