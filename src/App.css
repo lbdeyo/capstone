@@ -1,7 +1,9 @@
+/* Base (mobile-first) */
 #root {
   margin: 0 auto;
   text-align: center;
   background-color: white;
+  font-family: Karla;
 }
 
 .logo {
@@ -10,7 +12,6 @@
   will-change: filter;
   transition: filter 300ms;
 }
-
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -26,43 +27,31 @@
     transform: rotate(360deg);
   }
 }
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
-@media (max-width: 600px) {
-  .hero {
-    flex-direction: column;
-    max-height: none;
-  }
-
-  .cards {
-    flex-direction: column;
-  }
-
-  .nav {
-    flex-direction: column;
-  }
-  footer {
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 601px) {
-  #root {
-    width: 70%;
-    max-width: 1100px;
-  }
-  .cards {
-    flex-direction: column;
-  }
-}
-
 .card {
+  display: flex;
+  flex-direction: column;
+  /* keep mobile behavior */
+  flex: 0 1 auto; /* don't force equal widths on mobile */
   padding: 2em;
+}
+
+.card-body {
+  background: #edefee;
+  padding: 1rem;
+  flex: 1;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
 }
 
 .read-the-docs {
@@ -72,30 +61,15 @@
 .specials {
   background-color: white;
   color: black;
-
   padding: 1rem;
   text-align: left;
 }
-
 .specialsHeader {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }
-
-.card {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.cards {
-  display: flex;
-
-  justify-content: space-around;
-}
-
 .specials h2 {
   font-family: "Markazi Text";
   font-size: 48px;
@@ -105,15 +79,21 @@
   padding: 0;
 }
 
+.cards {
+  display: flex;
+  flex-direction: column; /* stack on mobile */
+  gap: 1rem;
+}
+
 .hero {
   background-color: #495e57;
   color: white;
-  justify-content: space-around;
   display: flex;
+  flex-direction: column; /* default: stack for mobile */
+  justify-content: space-around;
   padding: 1rem;
   gap: 1.5rem;
 }
-
 .hero h1 {
   font-family: "Markazi Text";
   font-size: 48px;
@@ -122,7 +102,6 @@
   margin: 0;
   padding: 0;
 }
-
 .hero h3 {
   font-family: "Markazi Text";
   font-size: 28px;
@@ -131,7 +110,15 @@
   margin: 0;
   padding: 0;
 }
-
+.hero p {
+  margin-bottom: 48px;
+}
+.hero img {
+  width: 90%;
+  border-radius: 20px;
+  margin: 25px 10px 10px 0; /* mobile-friendly margins */
+  padding: 0;
+}
 .heroLeft {
   text-align: left;
   max-width: 280px;
@@ -144,16 +131,25 @@
   padding: 15px;
 }
 
-.hero p {
-  margin-bottom: 48px;
+.button:hover {
+  color: #f4ce14;
+  background-color: black;
 }
+
 .nav {
   display: flex;
+  flex-direction: column; /* mobile stack */
   justify-content: space-around;
-
+  align-items: center;
   padding: 1rem;
   gap: 1rem;
-  align-items: center;
+}
+.nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
 }
 
 .doormat-nav {
@@ -167,60 +163,66 @@
   margin: 0;
 }
 
-.nav ul {
-  display: flex;
-  list-style: none;
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-}
-
 footer {
   display: flex;
-
+  flex-direction: column; /* mobile stack */
   justify-content: space-around;
   padding: 1rem;
 }
-
 footer img {
   max-width: 250px;
 }
 
-.hero img {
-  width: 90%;
-  border-radius: 20px;
-  /* no negative margin here */
-}
-
-/* Mobile tweaks, if you want them */
-@media (max-width: 600px) {
-  .hero {
-    flex-direction: column;
-  }
-  .hero img {
-    margin: 25px 10px 10px 0; /* bottom = 10px; no bleed */
-    padding: 0;
-  }
-}
-
-/* Desktop — add the bleed */
+/* ------------------------------ */
+/* Desktop overrides              */
+/* ------------------------------ */
 @media (min-width: 601px) {
   #root {
     width: 70%;
     max-width: 1100px;
   }
 
-  .hero {
-    max-height: 300px; /* background ends here */
+  .cards {
+    flex-direction: row;
+    align-items: stretch; /* equal heights */
+
+    justify-content: center; /* rely on gap for spacing */
   }
+  .cards > .card {
+    flex: 1 1 0; /* <-- equal widths across the row */
+  }
+
+  .hero {
+    flex-direction: row;
+    max-height: 300px; /* constrain background */
+  }
+  .hero img {
+    margin: 0 0 -40px 0; /* bleed below background */
+  }
+
+  .nav {
+    flex-direction: row;
+  }
+  footer {
+    flex-direction: row;
+  }
+
   .specials {
     margin-top: 75px;
     margin-bottom: 1rem;
   }
+}
 
-  .hero img {
-    margin-bottom: -40px; /* image extends below background */
-    /* ensure it's not clipped (default is visible, but explicit is fine) */
-    /* parent .hero overflow: visible; (optional) */
-  }
+.column-header {
+  font-family: Karla;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+a {
+  color: black;
+}
+a:hover {
+  text-decoration: underline;
+  color: black;
 }

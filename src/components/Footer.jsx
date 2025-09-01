@@ -3,7 +3,7 @@ export default function Footer() {
     <footer>
       <img src="../../img/restaurant.jpg" alt="restaurant" />
       <nav className=" doormat-nav">
-        <p>Doormat Navigation</p>
+        <p className="column-header">Doormat Navigation</p>
         <ul>
           <li>
             <a href="/" role="button">
@@ -39,7 +39,7 @@ export default function Footer() {
         </ul>
       </nav>
       <section className=" doormat-nav">
-        <p>Contact</p>
+        <p className="column-header">Contact</p>
         <ul>
           <li>Address</li>
 
@@ -48,7 +48,7 @@ export default function Footer() {
         </ul>
       </section>
       <section className=" doormat-nav">
-        <p>Social Media Links</p>
+        <p className="column-header">Social Media Links</p>
         <ul>
           <li>Facebook</li>
           <li>Instagram</li>
