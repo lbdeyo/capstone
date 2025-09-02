@@ -1,38 +1,37 @@
+import { Link } from "react-router-dom";
 export default function Header() {
   return (
     <nav className="nav">
       <img src="/img/Logo.svg" className="logo" alt="logo" />
       <ul>
         <li>
-          <a href="/" role="button">
-            Home
-          </a>
+          <Link to="/">Home</Link>
         </li>
 
         <li>
-          <a href="/about" role="button">
+          <Link to="/about" role="button">
             About
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/menu" role="button">
+          <Link to="/menu" role="button">
             Menu
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/reservations" role="button">
+          <Link to="/booking" role="button">
             Reservations
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/order" role="button">
+          <Link to="/order" role="button">
             Order Online
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/login" role="button">
+          <Link to="/login" role="button">
             Log in
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

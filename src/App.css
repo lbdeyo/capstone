@@ -27,11 +27,6 @@
     transform: rotate(360deg);
   }
 }
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
   display: flex;
@@ -66,17 +61,33 @@
 }
 .specialsHeader {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
 }
-.specials h2 {
+
+h2 {
   font-family: "Markazi Text";
   font-size: 48px;
   text-align: left;
   color: black;
+  line-height: 1em;
   margin: 0;
   padding: 0;
+}
+
+.specials h2 {
+  text-align: left;
+}
+
+.testimonials h2 {
+  text-align: center;
+}
+
+.testimonials {
+  display: flex;
+  flex-direction: column;
+  background-color: #ee9972;
+  justify-content: center;
+
+  text-align: left;
 }
 
 .cards {
@@ -120,6 +131,7 @@
   padding: 0;
 }
 .heroLeft {
+  display: block;
   text-align: left;
   max-width: 280px;
 }
@@ -128,12 +140,14 @@
   color: black;
   background-color: #f4ce14;
   border-radius: 15px;
+  text-align: center;
   padding: 15px;
 }
 
 .button:hover {
   color: #f4ce14;
   background-color: black;
+  text-decoration: none;
 }
 
 .nav {
@@ -168,49 +182,26 @@ footer {
   flex-direction: column; /* mobile stack */
   justify-content: space-around;
   padding: 1rem;
+
+  color: white;
 }
 footer img {
   max-width: 250px;
 }
 
-/* ------------------------------ */
-/* Desktop overrides              */
-/* ------------------------------ */
-@media (min-width: 601px) {
-  #root {
-    width: 70%;
-    max-width: 1100px;
-  }
+footer a {
+  color: white;
+}
 
-  .cards {
-    flex-direction: row;
-    align-items: stretch; /* equal heights */
+footer a:hover {
+  color: white;
+  text-decoration: underline;
+}
 
-    justify-content: center; /* rely on gap for spacing */
-  }
-  .cards > .card {
-    flex: 1 1 0; /* <-- equal widths across the row */
-  }
-
-  .hero {
-    flex-direction: row;
-    max-height: 300px; /* constrain background */
-  }
-  .hero img {
-    margin: 0 0 -40px 0; /* bleed below background */
-  }
-
-  .nav {
-    flex-direction: row;
-  }
-  footer {
-    flex-direction: row;
-  }
-
-  .specials {
-    margin-top: 75px;
-    margin-bottom: 1rem;
-  }
+.footerbg {
+  background-color: black;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 .column-header {
@@ -225,4 +216,155 @@ a {
 a:hover {
   text-decoration: underline;
   color: black;
+}
+
+.container {
+  width: 100%; /* take full width on mobile */
+  max-width: 1100px; /* don’t stretch past this on big screens */
+  margin-inline: auto; /* center when narrower than viewport */
+  padding-inline: 1rem; /* breathing room at edges */
+}
+
+.testimonial-card {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  padding: 0 0.75rem 0 0.75rem;
+  flex: 1;
+  font-size: small;
+}
+
+.testimonial-rating {
+  font-weight: 700;
+}
+
+.testimonial-profile {
+  display: flex;
+  gap: 1rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.testimonial-profile img {
+  width: 100px;
+}
+
+.t-cards-container {
+  display: flex;
+
+  gap: 1rem;
+  max-width: 800px;
+  align-content: space-around;
+  justify-content: flex-start;
+  align-self: center;
+}
+
+.about {
+  padding: 1rem;
+  text-align: left;
+}
+
+.about h2 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.aboutFlexCol {
+  display: block;
+  max-width: 500px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* ------------------------------ */
+/* Desktop overrides              */
+/* ------------------------------ */
+@media (min-width: 601px) {
+  #root {
+    width: 70%;
+    max-width: 1100px;
+  }
+
+  .testimonials {
+    padding: 5rem;
+    padding-bottom: 6rem;
+  }
+
+  .container {
+    width: 90%; /* only apply 70% on desktop/tablet */
+  }
+  .t-cards-container {
+    flex-direction: row;
+  }
+  .cards {
+    flex-direction: row;
+    align-items: stretch; /* equal heights */
+    justify-content: center; /* rely on gap for spacing */
+  }
+  .cards > .card {
+    flex: 1 1 0; /* <-- equal widths across the row */
+  }
+
+  .hero {
+    flex-direction: row;
+    max-height: 300px; /* constrain background */
+  }
+  .hero img {
+    margin: 0 0 -40px 0; /* bleed below background */
+  }
+
+  .specialsHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .nav {
+    flex-direction: row;
+  }
+  footer {
+    flex-direction: row;
+  }
+
+  .specials {
+    margin-top: 75px;
+    margin-bottom: 1rem;
+  }
+  .about {
+    padding: 2rem;
+  }
+
+  .about img {
+    width: 300px;
+  }
+  .aboutFlex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .specialsHeader {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .t-cards-container {
+    flex-direction: column;
+  }
+  .testimonials {
+    padding: 1rem;
+    padding-bottom: 2rem;
+  }
+  .about img {
+    width: 350px;
+  }
+  .aboutFlex {
+    display: block;
+  }
 }

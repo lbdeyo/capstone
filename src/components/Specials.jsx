@@ -2,8 +2,8 @@ import Card from "./Card";
 export default function Specials() {
   return (
     <section className="specials">
-      <div className="specialsContainer">
-        <section className="specialsHeader">
+      <div className="container">
+        <section className="specialsHeader container">
           <h2>This week's specials!</h2>
           <a href="/reservations" className="button">
             Reserve a Table
