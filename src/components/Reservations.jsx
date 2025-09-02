@@ -1,3 +1,9 @@
+import BookingForm from "./BookingForm";
+
 export default function Reservations() {
-  return <section></section>;
+  return (
+    <section>
+      <BookingForm />
+    </section>
+  );
 }
