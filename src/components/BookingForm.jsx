@@ -1,50 +1,10 @@
-import { useEffect, useState } from "react";
-
-export default function BookingForm() {
-  const [date, setDate] = useState();
-  const [time, setTime] = useState("17:00");
-  const [numPersons, setNumPersons] = useState(0);
-  const [occasion, setOccasion] = useState("");
-  const [times, setTimes] = useState([
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-  ]);
-
-  function onDateChange(e) {
-    setDate(e.target.value);
-  }
-
-  useEffect(() => {
-    console.log(date);
-  }, [date]);
-
-  function onNumPersonsChange(e) {
-    setNumPersons(e.target.value);
-  }
-
-  function onOccasionChange(e) {
-    setOccasion(e.target.value);
-  }
-
-  function onTimeChange(e) {
-    setTime(e.target.value);
-  }
-
-  const onSubmit = (e) => {
-    e.preventDefault(); // will only fire if form is valid
-    console.log({ date, time, numPersons, occasion });
-  };
-
+export default function BookingForm({ values, change, submit }) {
   return (
     <section className="booking-container">
       <section className="booking-form">
         <h2 style={{ textAlign: "center" }}>Reserve a Table</h2>
         <form
-          onSubmit={onSubmit}
+          onSubmit={submit}
           style={{
             display: "grid",
             maxWidth: "300px",
@@ -54,10 +14,14 @@ export default function BookingForm() {
           }}
         >
           <label htmlFor="res-date">Choose date</label>
-          <input type="date" id="res-date" onChange={onDateChange} required />
+          <input type="date" id="res-date" onChange={change} required />
           <label htmlFor="res-time">Choose time</label>
-          <select id="res-time" onChange={onTimeChange} required>
-            {times.map((time, index) => (
+          <select
+            id="res-time"
+            onChange={(e) => change("time", e.target.value)}
+            required
+          >
+            {values.times.map((time, index) => (
               <option key={index} value={time}>
                 {time}
               </option>
@@ -70,14 +34,14 @@ export default function BookingForm() {
             min="1"
             max="10"
             id="guests"
-            onChange={onNumPersonsChange}
+            onChange={(e) => change("numPersons", e.target.value)}
             required
           />
           <label htmlFor="occasion">Occasion</label>
           <select
             id="occasion"
-            onChange={onOccasionChange}
-            value={occasion}
+            onChange={(e) => change("occasion", e.target.value)}
+            value={values.occasion}
             required
           >
             <option>Birthday</option>
