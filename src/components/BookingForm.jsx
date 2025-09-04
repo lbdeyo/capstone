@@ -16,9 +16,12 @@ export default function BookingForm({
             id="res-date"
             value={values.date}
             onChange={(e) => {
-              const nextDate = e.target.value;
-              change("date", nextDate);
-              dispatch({ type: "date_changed", date: nextDate });
+              const stringDate = e.target.value; // "YYYY-MM-DD"
+              change("date", stringDate); // keep form state as the string
+
+              const [y, m, d] = stringDate.split("-").map(Number);
+              const jsDate = new Date(y, m - 1, d); // real Date object
+              dispatch({ type: "date_changed", date: jsDate });
             }}
             required
           />

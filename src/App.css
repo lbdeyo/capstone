@@ -281,6 +281,13 @@ a:hover {
   display: block;
   max-width: 500px;
 }
+
+.flexone {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -295,7 +302,11 @@ a:hover {
     width: 70%;
     max-width: 1100px;
   }
-
+  .columnar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
   .testimonials {
     padding: 5rem;
     padding-bottom: 6rem;
@@ -387,7 +398,7 @@ a:hover {
   gap: 20px;
   max-width: 300px;
   margin: 0 auto;
-
+  justify-content: stretch;
   padding-top: 1rem;
   padding-bottom: 1rem;
   text-align: left;
@@ -406,6 +417,7 @@ a:hover {
   /* Ensure it stacks neatly, not side-by-side */
   display: flex;
   flex-direction: column;
+  justify-items: stretch;
   gap: 0.25rem;
 }
 

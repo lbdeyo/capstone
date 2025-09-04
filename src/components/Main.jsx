@@ -2,24 +2,29 @@ import { useReducer } from "react";
 import BookingPage from "./BookingPage";
 
 function initializeTimes() {
-  return ["17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+  // Seed initial state synchronously using the provided stub API.
+  return fetchAPI(new Date());
 }
 
 function updateTimes(state, action) {
+  console.log(action);
   switch (action.type) {
     case "date_changed":
-      return ["17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+      // When the user picks a new date, get fresh times from the stub API.
+      return fetchAPI(action.date);
     default:
-      return state ?? initializeTimes();
+      // Reducers should return current state for unknown actions.
+      return state;
   }
 }
 
 export default function Main() {
   const [availableTimes, dispatch] = useReducer(
     updateTimes,
-    null,
-    initializeTimes
+    undefined, // initialArg (unused because we provide an initializer)
+    initializeTimes // initializer runs once at mount
   );
+
   return <BookingPage availableTimes={availableTimes} dispatch={dispatch} />;
 }
 

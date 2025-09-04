@@ -37,31 +37,36 @@ export default function Reservations({ availableTimes, dispatch }) {
       aria-labelledby="avail-times-heading"
     >
       <h2 style={{ textAlign: "center" }}>Book Now</h2>
-      <h3 id="avail-times-heading">Available slots</h3>
-
-      {/* Read-only list with ARIA semantics */}
-      <ul
-        className="slots"
-        role="listbox"
-        aria-label="Available reservation times"
-        aria-describedby="avail-times-help"
-      >
-        {availableTimes.map((t) => (
-          <BookingSlot key={t} time={t} selected={form.time === t} />
-        ))}
-      </ul>
-      <p id="avail-times-help" className="visually-hidden">
-        This list shows available times. Choose your time in the Time select
-        field below.
-      </p>
-
-      <BookingForm
-        values={form}
-        change={onChange}
-        submit={onSubmit}
-        times={availableTimes}
-        dispatch={dispatch}
-      />
+      <div className="columnar">
+        <div className="flexone">
+          <h3 id="avail-times-heading">Available slots</h3>
+          <div className="slotslayout">
+            <ul
+              className="slots"
+              role="listbox"
+              aria-label="Available reservation times"
+              aria-describedby="avail-times-help"
+            >
+              {availableTimes.map((t) => (
+                <BookingSlot key={t} time={t} selected={form.time === t} />
+              ))}
+            </ul>
+            <p id="avail-times-help" className="visually-hidden">
+              This list shows available times. Choose your time in the Time
+              select field below.
+            </p>
+          </div>
+        </div>
+        <div className="flexone">
+          <BookingForm
+            values={form}
+            change={onChange}
+            submit={onSubmit}
+            times={availableTimes}
+            dispatch={dispatch}
+          />
+        </div>
+      </div>
     </section>
   );
 }
