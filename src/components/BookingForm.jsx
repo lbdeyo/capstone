@@ -1,33 +1,48 @@
-export default function BookingForm({ values, change, submit }) {
+import React from "react";
+export default function BookingForm({
+  values,
+  change,
+  submit,
+  times,
+  dispatch,
+}) {
   return (
     <section className="booking-container">
-      <section className="booking-form">
-        <h2 style={{ textAlign: "center" }}>Reserve a Table</h2>
-        <form
-          onSubmit={submit}
-          style={{
-            display: "grid",
-            maxWidth: "300px",
-            gap: "20px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          <label htmlFor="res-date">Choose date</label>
-          <input type="date" id="res-date" onChange={change} required />
+      <form onSubmit={submit} className="booking-form" role="form">
+        <div className="field">
+          <label htmlFor="res-date">Choose date</label> <br></br>
+          <input
+            type="date"
+            id="res-date"
+            value={values.date}
+            onChange={(e) => {
+              const nextDate = e.target.value;
+              change("date", nextDate);
+              dispatch({ type: "date_changed", date: nextDate });
+            }}
+            required
+          />
+        </div>
+
+        <div className="field">
           <label htmlFor="res-time">Choose time</label>
+          <br></br>
           <select
             id="res-time"
+            value={values.time}
             onChange={(e) => change("time", e.target.value)}
             required
           >
-            {values.times.map((time, index) => (
-              <option key={index} value={time}>
-                {time}
+            {times.map((t) => (
+              <option key={t} value={t}>
+                {t}
               </option>
             ))}
           </select>
+        </div>
+        <div className="field">
           <label htmlFor="guests">Number of guests</label>
+          <br></br>
           <input
             type="number"
             placeholder="1"
@@ -37,7 +52,10 @@ export default function BookingForm({ values, change, submit }) {
             onChange={(e) => change("numPersons", e.target.value)}
             required
           />
+        </div>
+        <div className="field">
           <label htmlFor="occasion">Occasion</label>
+          <br></br>
           <select
             id="occasion"
             onChange={(e) => change("occasion", e.target.value)}
@@ -47,14 +65,12 @@ export default function BookingForm({ values, change, submit }) {
             <option>Birthday</option>
             <option>Anniversary</option>
           </select>
-          <input
-            type="submit"
-            className="button"
-            value="Make Your Reservation"
-            required
-          />
-        </form>
-      </section>
+        </div>
+
+        <button type="submit" className="button">
+          Make Your Reservation
+        </button>
+      </form>
     </section>
   );
 }

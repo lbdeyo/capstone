@@ -1,17 +1,15 @@
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./components/Homepage";
-import BookingPage from "./components/BookingPage";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import Main from "./components/Main";
+import "./App.css";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-         <Route path="/" element={<Homepage />}></Route>
-        <Route path="/booking" element={<BookingPage />}></Route>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/booking" element={<Main />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;

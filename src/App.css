@@ -383,6 +383,11 @@ a:hover {
 }
 
 .booking-form {
+  display: grid;
+  gap: 20px;
+  max-width: 300px;
+  margin: 0 auto;
+
   padding-top: 1rem;
   padding-bottom: 1rem;
   text-align: left;
@@ -390,4 +395,32 @@ a:hover {
 
 .booking-form label {
   margin-bottom: -20px;
+}
+
+/* Hide bullets and reset spacing for the slots list */
+.slots {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 1rem 0;
+
+  /* Ensure it stacks neatly, not side-by-side */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Optional: make each option look like a tidy row */
+.slots [role="option"] {
+  padding: 0.25rem 0.5rem;
+  line-height: 1.4;
+}
+
+/* Screen-reader-only helper text */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px);
+  white-space: nowrap;
 }

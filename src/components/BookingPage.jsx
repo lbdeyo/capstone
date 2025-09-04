@@ -1,12 +1,13 @@
 import Footer from "./Footer";
 import Reservations from "./Reservations";
 import Header from "./Header";
-export default function Homepage() {
+
+export default function BookingPage({ availableTimes, dispatch }) {
   return (
     <>
       <Header />
       <main>
-        <Reservations />
+        <Reservations availableTimes={availableTimes} dispatch={dispatch} />
       </main>
       <Footer />
     </>
