@@ -1,60 +1,39 @@
 // src/components/Main.jsx
-import { useReducer } from "react";
-import BookingPage from "./BookingPage";
-import { fetchAPI } from "../utils/api";
-
-const STORAGE_KEY = "availableTimes";
-
-function loadTimesFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    return Array.isArray(parsed) ? parsed : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveTimesToStorage(times) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(times));
-  } catch {
-    // ignore quota/disabled storage errors
-  }
-}
-
-function initializeTimes() {
-  // Try cache first, then fall back to fresh API
-  const cached = loadTimesFromStorage();
-  return cached ?? fetchAPI(new Date());
-}
-
-function updateTimes(state, action) {
-  switch (action.type) {
-    case "date_changed": {
-      const next = fetchAPI(action.date);
-      saveTimesToStorage(next);
-      return next;
-    }
-    default:
-      return state;
-  }
-}
+import React, { useReducer, useState, useEffect } from "react";
+import BookingForm from "./BookingForm";
+import { initializeTimes, updateTimes } from "../times";
 
 export default function Main({ onSubmit }) {
-  const [availableTimes, dispatch] = useReducer(
-    updateTimes,
-    undefined,
-    initializeTimes
-  );
+  const [values, setValues] = useState({
+    date: "", // "YYYY-MM-DD"
+    time: "",
+    numPersons: "",
+    occasion: "",
+  });
+  const change = (key, val) => setValues((v) => ({ ...v, [key]: val }));
+
+  // <-- creates `times` and `dispatch`
+  const [times, dispatch] = useReducer(updateTimes, [], initializeTimes);
+
+  // keep times in sync when the date string changes
+  useEffect(() => {
+    if (values.date) {
+      const [y, m, d] = values.date.split("-").map(Number);
+      dispatch({ type: "date_changed", date: new Date(y, m - 1, d) });
+    }
+  }, [values.date]);
+
+  const submit = (formValues) => onSubmit(formValues);
 
   return (
-    <BookingPage
-      availableTimes={availableTimes}
-      dispatch={dispatch}
-      onSubmit={onSubmit}
-    />
+    <main>
+      <BookingForm
+        values={values}
+        change={change}
+        submit={submit}
+        times={times}
+        dispatch={dispatch}
+      />
+    </main>
   );
 }
-
-export { initializeTimes, updateTimes };

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
 export default function BookingForm({
   values,
   change,
@@ -6,22 +7,47 @@ export default function BookingForm({
   times,
   dispatch,
 }) {
+  const formRef = useRef(null);
+  const [canSubmit, setCanSubmit] = useState(false);
+
+  const evalValidity = () => {
+    if (formRef.current) setCanSubmit(formRef.current.checkValidity());
+  };
+
+  useEffect(() => {
+    evalValidity(); // run on mount and when values change
+  }, [values]);
+
+  const onChange = useCallback((name, value) => {
+    console.log("change ->", name, value); // should show: change -> occasion Birthday
+    setForm((f) => ({ ...f, [name]: value }));
+  }, []);
+
   return (
     <section className="booking-container">
-      <form onSubmit={submit} className="booking-form" role="form">
+      <form
+        ref={formRef}
+        className="booking-form"
+        role="form"
+        onInput={evalValidity}
+        onChange={evalValidity}
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit(values); // <-- send data object up
+        }}
+      >
         <div className="field">
-          <label htmlFor="res-date">Choose date</label> <br></br>
+          <label htmlFor="res-date">Choose date</label>
+          <br />
           <input
             type="date"
             id="res-date"
-            value={values.date}
+            value={values.date || ""}
             onChange={(e) => {
-              const stringDate = e.target.value; // "YYYY-MM-DD"
-              change("date", stringDate); // keep form state as the string
-
-              const [y, m, d] = stringDate.split("-").map(Number);
-              const jsDate = new Date(y, m - 1, d); // real Date object
-              dispatch({ type: "date_changed", date: jsDate });
+              const s = e.target.value; // "YYYY-MM-DD"
+              change("date", s);
+              const [y, m, d] = s.split("-").map(Number);
+              dispatch({ type: "date_changed", date: new Date(y, m - 1, d) });
             }}
             required
           />
@@ -29,13 +55,16 @@ export default function BookingForm({
 
         <div className="field">
           <label htmlFor="res-time">Choose time</label>
-          <br></br>
+          <br />
           <select
             id="res-time"
-            value={values.time}
+            value={values.time || ""}
             onChange={(e) => change("time", e.target.value)}
             required
           >
+            <option value="" disabled hidden>
+              Select a time…
+            </option>
             {times.map((t) => (
               <option key={t} value={t}>
                 {t}
@@ -43,34 +72,48 @@ export default function BookingForm({
             ))}
           </select>
         </div>
+
         <div className="field">
           <label htmlFor="guests">Number of guests</label>
-          <br></br>
+          <br />
           <input
             type="number"
+            id="guests"
             placeholder="1"
             min="1"
             max="10"
-            id="guests"
-            onChange={(e) => change("numPersons", e.target.value)}
+            value={values.numPersons ?? ""}
+            onChange={(e) =>
+              change(
+                "numPersons",
+                e.target.value === "" ? "" : Number(e.target.value)
+              )
+            }
             required
           />
         </div>
+
         <div className="field">
           <label htmlFor="occasion">Occasion</label>
-          <br></br>
+          <br />
           <select
             id="occasion"
-            onChange={(e) => change("occasion", e.target.value)}
-            value={values.occasion}
+            name="occasion"
+            value={values.occasion || ""}
+            onChange={(e) => {
+              change("occasion", e.target.value);
+            }}
             required
           >
-            <option>Birthday</option>
-            <option>Anniversary</option>
+            <option value="" disabled hidden>
+              Select…
+            </option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
           </select>
         </div>
 
-        <button type="submit" className="button">
+        <button type="submit" className="button" disabled={!canSubmit}>
           Make Your Reservation
         </button>
       </form>

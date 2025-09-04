@@ -1,5 +1,5 @@
 // src/components/Main.test.jsx
-import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
+import { test, expect, vi, beforeEach, afterEach } from "vitest";
 vi.mock("../utils/api", () => ({ fetchAPI: vi.fn() }));
 
 import { initializeTimes, updateTimes } from "./Main";

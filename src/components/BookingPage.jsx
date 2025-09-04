@@ -1,17 +1,13 @@
+import Header from "./Header";
 import Footer from "./Footer";
 import Reservations from "./Reservations";
-import Header from "./Header";
 
-export default function BookingPage({ availableTimes, dispatch, onSubmit }) {
+export default function BookingPage({ onSubmit }) {
   return (
     <>
       <Header />
       <main>
-        <Reservations
-          availableTimes={availableTimes}
-          dispatch={dispatch}
-          onSubmit={onSubmit}
-        />
+        <Reservations onSubmit={onSubmit} />
       </main>
       <Footer />
     </>

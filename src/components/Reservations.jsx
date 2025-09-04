@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import BookingForm from "./BookingForm";
-import React from "react";
+import { initializeTimes, updateTimes } from "../times";
+
 function BookingSlot({ time, selected, isBooked = false }) {
   return (
     <li
@@ -13,10 +14,10 @@ function BookingSlot({ time, selected, isBooked = false }) {
   );
 }
 
-export default function Reservations({ availableTimes, dispatch, onSubmit }) {
+export default function Reservations({ onSubmit }) {
   const [form, setForm] = useState({
-    date: "",
-    time: "17:00",
+    date: "", // "YYYY-MM-DD"
+    time: "", // start empty so required works
     numPersons: "",
     occasion: "",
   });
@@ -24,6 +25,21 @@ export default function Reservations({ availableTimes, dispatch, onSubmit }) {
   const onChange = useCallback((name, value) => {
     setForm((f) => ({ ...f, [name]: value }));
   }, []);
+
+  // times + dispatch live here
+  const [availableTimes, dispatch] = useReducer(
+    updateTimes,
+    [],
+    initializeTimes
+  );
+
+  // refresh available times when the date string changes
+  useEffect(() => {
+    if (form.date) {
+      const [y, m, d] = form.date.split("-").map(Number);
+      dispatch({ type: "date_changed", date: new Date(y, m - 1, d) });
+    }
+  }, [form.date]);
 
   return (
     <section
@@ -51,11 +67,12 @@ export default function Reservations({ availableTimes, dispatch, onSubmit }) {
             </p>
           </div>
         </div>
+
         <div className="flexone">
           <BookingForm
             values={form}
             change={onChange}
-            submit={onSubmit}
+            submit={onSubmit} // App.onSubmit(formData)
             times={availableTimes}
             dispatch={dispatch}
           />
