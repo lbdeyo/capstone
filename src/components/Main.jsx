@@ -1,31 +1,60 @@
+// src/components/Main.jsx
 import { useReducer } from "react";
 import BookingPage from "./BookingPage";
+import { fetchAPI } from "../utils/api";
+
+const STORAGE_KEY = "availableTimes";
+
+function loadTimesFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveTimesToStorage(times) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(times));
+  } catch {
+    // ignore quota/disabled storage errors
+  }
+}
 
 function initializeTimes() {
-  // Seed initial state synchronously using the provided stub API.
-  return fetchAPI(new Date());
+  // Try cache first, then fall back to fresh API
+  const cached = loadTimesFromStorage();
+  return cached ?? fetchAPI(new Date());
 }
 
 function updateTimes(state, action) {
-  console.log(action);
   switch (action.type) {
-    case "date_changed":
-      // When the user picks a new date, get fresh times from the stub API.
-      return fetchAPI(action.date);
+    case "date_changed": {
+      const next = fetchAPI(action.date);
+      saveTimesToStorage(next);
+      return next;
+    }
     default:
-      // Reducers should return current state for unknown actions.
       return state;
   }
 }
 
-export default function Main() {
+export default function Main({ onSubmit }) {
   const [availableTimes, dispatch] = useReducer(
     updateTimes,
-    undefined, // initialArg (unused because we provide an initializer)
-    initializeTimes // initializer runs once at mount
+    undefined,
+    initializeTimes
   );
 
-  return <BookingPage availableTimes={availableTimes} dispatch={dispatch} />;
+  return (
+    <BookingPage
+      availableTimes={availableTimes}
+      dispatch={dispatch}
+      onSubmit={onSubmit}
+    />
+  );
 }
 
 export { initializeTimes, updateTimes };

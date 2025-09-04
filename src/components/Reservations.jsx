@@ -13,19 +13,13 @@ function BookingSlot({ time, selected, isBooked = false }) {
   );
 }
 
-export default function Reservations({ availableTimes, dispatch }) {
+export default function Reservations({ availableTimes, dispatch, onSubmit }) {
   const [form, setForm] = useState({
     date: "",
     time: "17:00",
     numPersons: "",
     occasion: "",
   });
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    // This message will be read by screen readers via aria-live in BookingForm
-    setForm((f) => ({ ...f, submittedMessage: "Reservation submitted." }));
-  };
 
   const onChange = useCallback((name, value) => {
     setForm((f) => ({ ...f, [name]: value }));
