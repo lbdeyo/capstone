@@ -9,7 +9,7 @@ export default function Hero() {
           recipes served with a modern twist.
         </p>
 
-        <a href="/reservations" className="button">
+        <a href="/booking" className="button">
           Reserve a Table
         </a>
       </section>

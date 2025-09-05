@@ -6,7 +6,7 @@ export default function BookingPage({ onSubmit }) {
   return (
     <>
       <Header />
-      <main>
+      <main id="main">
         <Reservations onSubmit={onSubmit} />
       </main>
       <Footer />

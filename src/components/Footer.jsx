@@ -23,7 +23,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="/reservations" role="button">
+              <a href="/booking" role="button">
                 Reservations
               </a>
             </li>

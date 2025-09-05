@@ -1,3 +1,4 @@
+// src/components/Reservations.jsx
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import BookingForm from "./BookingForm";
 import { initializeTimes, updateTimes } from "../times";
@@ -17,29 +18,43 @@ function BookingSlot({ time, selected, isBooked = false }) {
 export default function Reservations({ onSubmit }) {
   const [form, setForm] = useState({
     date: "", // "YYYY-MM-DD"
-    time: "", // start empty so required works
+    time: "", // keep empty until user selects (or we auto-fill)
     numPersons: "",
     occasion: "",
   });
 
-  const onChange = useCallback((name, value) => {
+  const change = useCallback((name, value) => {
     setForm((f) => ({ ...f, [name]: value }));
   }, []);
 
-  // times + dispatch live here
   const [availableTimes, dispatch] = useReducer(
     updateTimes,
     [],
     initializeTimes
   );
 
-  // refresh available times when the date string changes
+  // When date changes, ask API for new times
   useEffect(() => {
-    if (form.date) {
-      const [y, m, d] = form.date.split("-").map(Number);
-      dispatch({ type: "date_changed", date: new Date(y, m - 1, d) });
-    }
+    if (!form.date) return;
+    const [y, m, d] = form.date.split("-").map(Number);
+    dispatch({ type: "date_changed", date: new Date(y, m - 1, d) });
   }, [form.date]);
+
+  // Strategy A (recommended): auto-select first available time when list updates
+  useEffect(() => {
+    if (availableTimes.length === 0) return;
+    // If current `time` is not in the new list, pick the first
+    if (!form.time || !availableTimes.includes(form.time)) {
+      setForm((f) => ({ ...f, time: availableTimes[0] })); // ONLY touch `time`
+    }
+  }, [availableTimes, form.time]);
+
+  // If you prefer to FORCE the user to reselect, replace the effect above with:
+  // useEffect(() => {
+  //   if (form.time && !availableTimes.includes(form.time)) {
+  //     setForm((f) => ({ ...f, time: "" }));
+  //   }
+  // }, [availableTimes, form.time]);
 
   return (
     <section
@@ -71,7 +86,7 @@ export default function Reservations({ onSubmit }) {
         <div className="flexone">
           <BookingForm
             values={form}
-            change={onChange}
+            change={change}
             submit={onSubmit} // App.onSubmit(formData)
             times={availableTimes}
             dispatch={dispatch}

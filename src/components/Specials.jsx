@@ -5,7 +5,7 @@ export default function Specials() {
       <div className="container">
         <section className="specialsHeader container">
           <h2>This week's specials!</h2>
-          <a href="/reservations" className="button">
+          <a href="/booking" className="button">
             Reserve a Table
           </a>
         </section>

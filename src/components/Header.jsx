@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 export default function Header() {
   return (
-    <nav className="nav">
+    <nav className="nav" aria-label="Primary">
       <img src="/img/Logo.svg" className="logo" alt="logo" />
       <ul>
         <li>

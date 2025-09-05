@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+// src/components/BookingForm.jsx
+import React from "react";
 
 export default function BookingForm({
   values,
@@ -7,35 +8,32 @@ export default function BookingForm({
   times,
   dispatch,
 }) {
-  const formRef = useRef(null);
-  const [canSubmit, setCanSubmit] = useState(false);
-
-  const evalValidity = () => {
-    if (formRef.current) setCanSubmit(formRef.current.checkValidity());
-  };
-
-  useEffect(() => {
-    evalValidity(); // run on mount and when values change
-  }, [values]);
-
-  const onChange = useCallback((name, value) => {
-    console.log("change ->", name, value); // should show: change -> occasion Birthday
-    setForm((f) => ({ ...f, [name]: value }));
-  }, []);
+  // derive validity purely from state (no refs/checkValidity)
+  const guests = values.numPersons === "" ? NaN : Number(values.numPersons);
+  const isValid =
+    values.date &&
+    values.time &&
+    values.occasion &&
+    Number.isFinite(guests) &&
+    guests >= 1 &&
+    guests <= 10;
 
   return (
     <section className="booking-container">
+      {/* aria-live region for submission/status messages if you add them later */}
+      <div aria-live="polite" aria-atomic="true" className="visually-hidden">
+        {values.submittedMessage || ""}
+      </div>
+
       <form
-        ref={formRef}
         className="booking-form"
         role="form"
-        onInput={evalValidity}
-        onChange={evalValidity}
         onSubmit={(e) => {
           e.preventDefault();
-          submit(values); // <-- send data object up
+          if (isValid) submit(values);
         }}
       >
+        {/* Date */}
         <div className="field">
           <label htmlFor="res-date">Choose date</label>
           <br />
@@ -53,6 +51,7 @@ export default function BookingForm({
           />
         </div>
 
+        {/* Time */}
         <div className="field">
           <label htmlFor="res-time">Choose time</label>
           <br />
@@ -73,6 +72,7 @@ export default function BookingForm({
           </select>
         </div>
 
+        {/* Guests */}
         <div className="field">
           <label htmlFor="guests">Number of guests</label>
           <br />
@@ -82,6 +82,7 @@ export default function BookingForm({
             placeholder="1"
             min="1"
             max="10"
+            step="1"
             value={values.numPersons ?? ""}
             onChange={(e) =>
               change(
@@ -93,6 +94,7 @@ export default function BookingForm({
           />
         </div>
 
+        {/* Occasion */}
         <div className="field">
           <label htmlFor="occasion">Occasion</label>
           <br />
@@ -100,9 +102,7 @@ export default function BookingForm({
             id="occasion"
             name="occasion"
             value={values.occasion || ""}
-            onChange={(e) => {
-              change("occasion", e.target.value);
-            }}
+            onChange={(e) => change("occasion", e.target.value)}
             required
           >
             <option value="" disabled hidden>
@@ -113,7 +113,12 @@ export default function BookingForm({
           </select>
         </div>
 
-        <button type="submit" className="button" disabled={!canSubmit}>
+        <button
+          type="submit"
+          className="button"
+          disabled={!isValid}
+          aria-label="On Click — Make Your Reservation"
+        >
           Make Your Reservation
         </button>
       </form>
